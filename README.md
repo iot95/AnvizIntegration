@@ -40,6 +40,7 @@ Features
 - Automatically answer ping requests
 - Get/set TimeZone information
 - Get/set Schedule Bells
+- Synchronize central user databases across multiple devices with retry-aware helpers
 
 Tested devices
 --------
@@ -48,6 +49,8 @@ Tested devices
  - W1 Pro
  - P7
  - Facepass 7
+ - FaceDeep 5
  - WF30 Pro
  - A350C
  - M7
+ - C2 KA

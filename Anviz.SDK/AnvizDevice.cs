@@ -1,4 +1,5 @@
 ﻿using Anviz.SDK.Responses;
+using Anviz.SDK.Users;
 using Anviz.SDK.Utils;
 using System;
 using System.Net.Sockets;
@@ -9,6 +10,7 @@ namespace Anviz.SDK
     {
         public ulong DeviceId { get; private set; } = 0;
         public BiometricType DeviceBiometricType { get; private set; } = BiometricType.Unknown;
+        public string DeviceTypeCode { get; private set; } = string.Empty;
         private readonly AnvizStream DeviceStream;
 
         public event EventHandler DevicePing;

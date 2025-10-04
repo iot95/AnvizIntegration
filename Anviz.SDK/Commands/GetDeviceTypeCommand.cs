@@ -22,7 +22,8 @@ namespace Anviz.SDK
         {
             var response = await DeviceStream.SendCommand(new GetDeviceTypeCommand(DeviceId));
             DeviceId = response.DeviceID;
-            return Bytes.GetAsciiString(response.DATA);
+            DeviceTypeCode = Bytes.GetAsciiString(response.DATA);
+            return DeviceTypeCode;
         }
 
         public async Task<BiometricType> GetDeviceBiometricType()

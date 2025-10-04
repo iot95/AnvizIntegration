@@ -1,4 +1,5 @@
 ﻿using Anviz.SDK.Commands;
+using Anviz.SDK.Users;
 using Anviz.SDK.Utils;
 using System.Threading.Tasks;
 
@@ -25,6 +26,12 @@ namespace Anviz.SDK
         {
             var response = await DeviceStream.SendCommand(new GetFaceTemplateCommand(DeviceId, employeeID));
             return response.DATA;
+        }
+
+        public async Task<FaceTemplate> GetFaceTemplateInfo(ulong employeeID)
+        {
+            var response = await DeviceStream.SendCommand(new GetFaceTemplateCommand(DeviceId, employeeID));
+            return FaceTemplate.FromDevicePayload(response.DATA);
         }
     }
 }
