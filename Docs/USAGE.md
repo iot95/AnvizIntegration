@@ -95,7 +95,7 @@ To quickly inspect a device, run the sample console and follow the prompts. It c
 * `DeleteEmployeesData(ulong id)` removes a user.
 * `SetRecords(Record)` inserts a manual record entry if you need to seed data.【F:Sample/Program.cs†L75-L103】
 
-When enrolling interactively, call `EnrollFingerprint(userId, fingerIndex)`; the result can be saved locally or pushed to other terminals with `SetFingerprintTemplate`.【F:Sample/Program.cs†L92-L97】【F:Anviz.SDK/Commands/SetFingerprintTemplateCommand.cs†L23-L28】
+When enrolling interactively, call `EnrollFingerprint(userId, fingerSlot, verifyCount)`; the result can be saved locally or pushed to other terminals with `SetFingerprintTemplate`.【F:Sample/Scenarios/ClientModeEnrollmentScenario.cs†L54-L70】【F:Anviz.SDK/Commands/SetFingerprintTemplateCommand.cs†L23-L38】
 
 ### Passwords, cards, and fingerprints
 

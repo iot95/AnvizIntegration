@@ -54,7 +54,7 @@ internal sealed class ClientModeEnrollmentScenario
         if (_options.EnrollFingerprint)
         {
             _options.Log?.Invoke($"Enrolling fingerprint for user {userProfile.Id} (verify {_options.FingerprintVerificationCount} times)...");
-            var fingerprintTemplate = await device.EnrollFingerprint(userProfile.Id, _options.FingerprintVerificationCount).ConfigureAwait(false);
+            var fingerprintTemplate = await device.EnrollFingerprint(userProfile.Id, _options.FingerSlot, _options.FingerprintVerificationCount).ConfigureAwait(false);
             await device.SetFingerprintTemplate(userProfile.Id, _options.FingerSlot, fingerprintTemplate).ConfigureAwait(false);
             _options.Log?.Invoke($"Fingerprint stored in slot {_options.FingerSlot}.");
         }
@@ -62,7 +62,7 @@ internal sealed class ClientModeEnrollmentScenario
         if (_options.FaceTemplateProvider != null)
         {
             var biometricType = await device.GetDeviceBiometricType().ConfigureAwait(false);
-            if (DeviceCapabilities.SupportsFaceTemplates(biometricType))
+            if (DeviceCapabilities.SupportsFaceTemplates(biometricType, device.DeviceTypeCode))
             {
                 _options.Log?.Invoke($"Device supports face templates. Requesting data from provider...");
                 var faceTemplate = await _options.FaceTemplateProvider(device, cancellationToken).ConfigureAwait(false);

@@ -95,7 +95,7 @@ namespace Anviz.SDK.Users
                 await ExecuteWithRetry(async _ => await device.SetEmployeesData(upsertProfiles.Select(profile => profile.CreateDeviceUser()).ToList()), cancellationToken);
             }
 
-            if (DeviceCapabilities.SupportsFaceTemplates(device.DeviceBiometricType))
+            if (DeviceCapabilities.SupportsFaceTemplates(device.DeviceBiometricType, device.DeviceTypeCode))
             {
                 foreach (var profile in centralUsers.Values)
                 {
@@ -110,7 +110,7 @@ namespace Anviz.SDK.Users
 
             await ExecuteWithRetry(async _ => await device.SetEmployeesData(profile.CreateDeviceUser()), cancellationToken);
 
-            if (DeviceCapabilities.SupportsFaceTemplates(device.DeviceBiometricType))
+            if (DeviceCapabilities.SupportsFaceTemplates(device.DeviceBiometricType, device.DeviceTypeCode))
             {
                 await SynchronizeFaceTemplatesAsync(device, profile, cancellationToken);
             }

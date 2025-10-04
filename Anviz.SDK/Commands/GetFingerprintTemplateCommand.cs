@@ -7,11 +7,11 @@ namespace Anviz.SDK.Commands
     class GetFingerprintTemplateCommand : Command
     {
         private const byte GET_FPTEMPLATE = 0x44;
-        public GetFingerprintTemplateCommand(ulong deviceId, ulong employeeID, Finger finger) : base(deviceId)
+        public GetFingerprintTemplateCommand(ulong deviceId, ulong employeeID, byte slot) : base(deviceId)
         {
             var payload = new byte[6];
             Bytes.Write(5, employeeID).CopyTo(payload, 0);
-            payload[5] = (byte)(finger + 1);
+            payload[5] = slot;
             BuildPayload(GET_FPTEMPLATE, payload);
         }
     }
@@ -21,9 +21,14 @@ namespace Anviz.SDK
 {
     public partial class AnvizDevice
     {
-        public async Task<byte[]> GetFingerprintTemplate(ulong employeeID, Finger finger)
+        public Task<byte[]> GetFingerprintTemplate(ulong employeeID, Finger finger)
         {
-            var response = await DeviceStream.SendCommand(new GetFingerprintTemplateCommand(DeviceId, employeeID, finger));
+            return GetBiometricTemplate(employeeID, (byte)(finger + 1));
+        }
+
+        public async Task<byte[]> GetBiometricTemplate(ulong employeeID, byte slot)
+        {
+            var response = await DeviceStream.SendCommand(new GetFingerprintTemplateCommand(DeviceId, employeeID, slot)).ConfigureAwait(false);
             return response.DATA;
         }
     }
