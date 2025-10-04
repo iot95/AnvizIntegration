@@ -1,5 +1,7 @@
 ﻿using Anviz.SDK.Commands;
+using Anviz.SDK.Users;
 using Anviz.SDK.Utils;
+using System;
 using System.Threading.Tasks;
 
 namespace Anviz.SDK.Commands
@@ -7,12 +9,10 @@ namespace Anviz.SDK.Commands
     class SetFaceTemplateCommand : Command
     {
         private const byte SET_FACETEMPLATE = 0x45;
-        public SetFaceTemplateCommand(ulong deviceId, ulong employeeID, byte[] template) : base(deviceId)
+        public SetFaceTemplateCommand(ulong deviceId, ulong employeeID, FaceTemplate template, DeviceFaceTemplateFormat format) : base(deviceId)
         {
-            var payload = new byte[15366];
-            Bytes.Write(5, employeeID).CopyTo(payload, 0);
-            payload[5] = 1;
-            template.CopyTo(payload, 6);
+            var descriptor = format ?? DeviceFaceTemplateFormat.Default;
+            var payload = template.ToDevicePayload(employeeID, descriptor);
             BuildPayload(SET_FACETEMPLATE, payload);
         }
     }
@@ -22,9 +22,25 @@ namespace Anviz.SDK
 {
     public partial class AnvizDevice
     {
+        public async Task SetFaceTemplate(ulong employeeID, FaceTemplate template, DeviceFaceTemplateFormat format = null)
+        {
+            if (template == null)
+            {
+                throw new ArgumentNullException(nameof(template));
+            }
+
+            var descriptor = format ?? DeviceCapabilities.GetFaceTemplateFormat(DeviceTypeCode);
+            await DeviceStream.SendCommand(new SetFaceTemplateCommand(DeviceId, employeeID, template, descriptor));
+        }
+
         public async Task SetFaceTemplate(ulong employeeID, byte[] template)
         {
-            await DeviceStream.SendCommand(new SetFaceTemplateCommand(DeviceId, employeeID, template));
+            if (template == null)
+            {
+                throw new ArgumentNullException(nameof(template));
+            }
+
+            await SetFaceTemplate(employeeID, new FaceTemplate(template));
         }
     }
 }
