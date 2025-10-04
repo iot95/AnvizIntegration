@@ -11,7 +11,7 @@ namespace Anviz.SDK.Users
         public byte[] Data { get; }
         public string ContentHash { get; }
 
-        public FaceTemplate(byte[] template) : this(1, template)
+        public FaceTemplate(byte[] template) : this(DeviceFaceTemplateFormat.Default.SlotIndex, template)
         {
         }
 

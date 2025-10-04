@@ -39,9 +39,20 @@ namespace Anviz.SDK.Utils
             return DeviceFaceTemplateFormat.Default;
         }
 
-        public static bool SupportsFaceTemplates(BiometricType biometricType)
+        public static bool SupportsFaceTemplates(BiometricType biometricType, string deviceTypeCode = null)
         {
-            return biometricType == BiometricType.Face;
+            if (biometricType == BiometricType.Face)
+            {
+                return true;
+            }
+
+            if (biometricType == BiometricType.Unknown && !string.IsNullOrWhiteSpace(deviceTypeCode))
+            {
+                var descriptor = GetFaceTemplateFormat(deviceTypeCode);
+                return descriptor != DeviceFaceTemplateFormat.Default;
+            }
+
+            return false;
         }
     }
 }

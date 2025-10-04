@@ -1,4 +1,5 @@
 ﻿using Anviz.SDK.Commands;
+using Anviz.SDK.Users;
 using Anviz.SDK.Utils;
 using System.Threading.Tasks;
 
@@ -29,7 +30,17 @@ namespace Anviz.SDK
         public async Task<BiometricType> GetDeviceBiometricType()
         {
             var code = await GetDeviceTypeCode();
-            DeviceBiometricType = BiometricTypes.DecodeBiometricType(code);
+            var decoded = BiometricTypes.DecodeBiometricType(code);
+            if (decoded == BiometricType.Unknown)
+            {
+                var descriptor = DeviceCapabilities.GetFaceTemplateFormat(code);
+                if (descriptor != DeviceFaceTemplateFormat.Default)
+                {
+                    decoded = BiometricType.Face;
+                }
+            }
+
+            DeviceBiometricType = decoded;
             return DeviceBiometricType;
         }
     }

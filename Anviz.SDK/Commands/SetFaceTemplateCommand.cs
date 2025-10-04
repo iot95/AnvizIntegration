@@ -29,8 +29,8 @@ namespace Anviz.SDK
                 throw new ArgumentNullException(nameof(template));
             }
 
-            var descriptor = format ?? DeviceCapabilities.GetFaceTemplateFormat(DeviceTypeCode);
-            await DeviceStream.SendCommand(new SetFaceTemplateCommand(DeviceId, employeeID, template, descriptor));
+            var descriptor = format ?? await EnsureFaceTemplateFormatAsync().ConfigureAwait(false);
+            await DeviceStream.SendCommand(new SetFaceTemplateCommand(DeviceId, employeeID, template, descriptor)).ConfigureAwait(false);
         }
 
         public async Task SetFaceTemplate(ulong employeeID, byte[] template)
@@ -40,7 +40,9 @@ namespace Anviz.SDK
                 throw new ArgumentNullException(nameof(template));
             }
 
-            await SetFaceTemplate(employeeID, new FaceTemplate(template));
+            var descriptor = await EnsureFaceTemplateFormatAsync().ConfigureAwait(false);
+            var faceTemplate = new FaceTemplate(descriptor.SlotIndex, template);
+            await SetFaceTemplate(employeeID, faceTemplate, descriptor).ConfigureAwait(false);
         }
     }
 }
