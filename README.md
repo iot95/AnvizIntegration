@@ -54,7 +54,7 @@ Tested devices
  - A350C
  - M7
  - C2 KA
-
+ - 
 ## Documentation
 
 - [Usage guide](Docs/USAGE.md) – step-by-step instructions for connecting to devices, managing users and biometrics, and synchronizing multiple terminals.
