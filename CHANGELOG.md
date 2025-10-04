@@ -1,3 +1,11 @@
+## Unreleased
+IMPROVEMENTS:
+* Added a high level user synchronization service that keeps a central roster aligned across multiple devices and retries transient failures.
+* Added robust face template handling with padding, hashing and device specific format detection to avoid RET errors when uploading faces.
+
+BUG FIXES:
+* Prevent device errors when re-sending deletes by tolerating "user not found" responses during synchronization flows.
+
 ## v2.0.16
 FEATURES:
 * InquireCard command to read current card, like EnrollFingerprint

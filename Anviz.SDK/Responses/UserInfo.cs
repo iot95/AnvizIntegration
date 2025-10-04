@@ -1,4 +1,5 @@
 ﻿using Anviz.SDK.Utils;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -50,6 +51,26 @@ namespace Anviz.SDK.Responses
             PWDH8 = data[offset + 37];
             Keep = data[offset + 38];
             Message = data[offset + 39];
+        }
+
+        public UserInfo(UserInfo source)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            Id = source.Id;
+            Password = source.Password;
+            Card = source.Card;
+            Name = source.Name;
+            Department = source.Department;
+            Group = source.Group;
+            Mode = source.Mode;
+            EnrolledFingerprints = new List<Finger>(source.EnrolledFingerprints);
+            PWDH8 = source.PWDH8;
+            Keep = source.Keep;
+            Message = source.Message;
         }
 
         internal byte[] ToArray()
