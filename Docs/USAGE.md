@@ -152,3 +152,19 @@ The `Sample` project strings these concepts together: it authenticates a device,
 * **Intermittent connection drops:** Expect to reconnect if the 20 second timeout in `AnvizStream` elapses. For bulk operations, rely on the retry policy exposed by `UserSynchronizationService`.【F:Anviz.SDK/AnvizStream.cs†L12-L112】【F:Anviz.SDK/Users/UserSynchronizationService.cs†L198-L220】
 
 With these tools you can provision, audit, and synchronise fleets of Anviz devices from a central .NET application.
+
+## 13. Scenario playbooks
+
+The `Sample` project now includes extensible client-mode and server-mode workflows that you can drop into production services or expand with your own business rules.【F:Sample/Program.cs†L1-L119】【F:Sample/Scenarios/ClientModeEnrollmentScenario.cs†L1-L88】【F:Sample/Scenarios/ServerModeRealtimeScenario.cs†L1-L87】 The scenarios share helpers to describe devices, enforce real-time push mode, and subscribe to live events.【F:Sample/Scenarios/ScenarioUtilities.cs†L1-L102】 The following summaries highlight the core building blocks:
+
+### Client mode – enrol users on demand
+
+* `ClientModeEnrollmentScenario` connects to a device, writes `UserInfo` data, optionally captures a fingerprint, and uploads a face template when the hardware supports it.【F:Sample/Scenarios/ClientModeEnrollmentScenario.cs†L31-L81】 You can plug in a `FaceTemplateProvider` that sources templates from disk, a web service, or a camera pipeline.
+* `Program.RunClientModeAsync` shows how to populate the scenario from environment variables, run a post-enrolment hook to fetch incremental attendance, and clear the device cursor once the new punches are processed.【F:Sample/Program.cs†L28-L71】
+
+### Server mode – react to push connections
+
+* `ServerModeRealtimeScenario` listens for inbound sockets, negotiates device capabilities, and keeps each connection alive until a cancellation token or hardware fault ends the session.【F:Sample/Scenarios/ServerModeRealtimeScenario.cs†L23-L87】 Real-time attendance packets are dispatched through a callback, making it easy to enqueue work items or notify downstream systems.
+* `Program.RunServerModeAsync` demonstrates how to spin up the listener alongside a background worker that dequeues live records and performs actions such as opening doors or updating HRIS systems.【F:Sample/Program.cs†L73-L118】 The example also shows how to push configuration—like setting the device clock—whenever a unit connects.
+
+Extend either scenario by supplying new delegates or wrapping them in hosted services: they are intentionally designed around dependency injection-friendly options objects so they stay testable and easy to customise.

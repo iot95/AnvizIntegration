@@ -58,3 +58,4 @@ Tested devices
 ## Documentation
 
 - [Usage guide](Docs/USAGE.md) – step-by-step instructions for connecting to devices, managing users and biometrics, and synchronizing multiple terminals.
+- [Scenario playbooks](Docs/USAGE.md#13-scenario-playbooks) – production-ready examples for client polling and server push topologies, including enrolment and real-time automation patterns.
