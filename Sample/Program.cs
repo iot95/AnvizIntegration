@@ -30,13 +30,24 @@ internal static class Program
 
     private static async Task RunClientModeAsync(AnvizManager manager)
     {
-        var host = Environment.GetEnvironmentVariable("ANVIZ_DEVICE_HOST") ?? "10.0.0.1";
+        var host = Environment.GetEnvironmentVariable("ANVIZ_DEVICE_HOST") ?? "192.168.10.198";
         var port = TryParse(Environment.GetEnvironmentVariable("ANVIZ_DEVICE_PORT"), 5010);
-        var userId = (ulong)TryParse(Environment.GetEnvironmentVariable("ANVIZ_USER_ID"), 1001);
+        var userId = (ulong)TryParse(Environment.GetEnvironmentVariable("ANVIZ_USER_ID"), 1210);
         var userName = Environment.GetEnvironmentVariable("ANVIZ_USER_NAME") ?? "SDK User";
-        var pin = Environment.GetEnvironmentVariable("ANVIZ_USER_PIN");
-        var card = Environment.GetEnvironmentVariable("ANVIZ_USER_CARD");
 
+        ulong? pin = null;
+        ulong? card = null;
+        try
+        {
+            
+            pin = Convert.ToUInt64(Environment.GetEnvironmentVariable("ANVIZ_USER_PIN"));
+            card = Convert.ToUInt64(Environment.GetEnvironmentVariable("ANVIZ_USER_CARD"));
+        }
+        catch
+        {
+            // Intentional fallthrough
+        }
+        
         var clientOptions = new ClientModeEnrollmentOptions
         {
             Host = host,
